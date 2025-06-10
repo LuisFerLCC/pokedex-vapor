@@ -1,0 +1,32 @@
+name: Docker build
+
+on:
+    push:
+        branches:
+        - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Clone repository
+              uses: actions/checkout@v4
+            
+            - name: Login to Docker Hub
+              run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p "${{ secrets.DOCKER_PASSWORD }}"
+
+            - name: Docker build
+              run: docker build -t luisferlcc/pokedex-api:latest .
+
+            - name: Ejecutar migracion en produccion
+              run: |
+                docker container run --rm \
+                -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
+                -e DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
+                -e DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
+                -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+                -e DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
+                luisferlcc/pokedex-api:latest migrate --yes
+        
+            - name: Docker Push
+              run: docker push luisferlcc/pokedex-api:latest
