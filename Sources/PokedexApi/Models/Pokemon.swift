@@ -6,7 +6,6 @@
 //
 
 import Fluent
-import Foundation
 
 /// Un modelo de Object-relational Mapping (ORM) que representa a un Pokémon en
 /// la base de datos.
@@ -35,6 +34,8 @@ import Foundation
 /// necesario utilizar a un Data Transfer Object (DTO) llamado ``PokemonDTO``.
 /// Esto se logra por medio de los métodos ``toDTO()`` y
 /// ``PokemonDTO/toModel()``.
+import Foundation
+
 final class Pokemon: Model, @unchecked Sendable {
     /// El nombre de la tabla a la que corresponde este modelo en la base de
     /// datos.
@@ -159,7 +160,7 @@ final class Pokemon: Model, @unchecked Sendable {
             nombre: self.$nombre.value,
             tipo: self.$tipo.value,
             descripcion: self.$descripcion.value,
-            imagen: self.$imagen.value,
+            imagen: self.$imagen.value
         )
     }
 }
